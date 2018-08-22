@@ -1,0 +1,35 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <img src="{{ user_p.profile.profile_picture.url }}" class="rounded img-fluid" style="height:290px; width:290px; margin-top:15px; margin-left:15px; float:left;">
+    <div style="text-align:center;">
+        <h1 class="display-2">{{ user_p.username }}</h1>
+        <h3 class="display-4">{{ user_p.first_name }} {{ user_p.last_name }}</h3>
+        <h4>{{ user_p.email }}</h4>
+        <strong>{{ user_p.profile.date_of_birth }}</strong>
+        <br><br>
+        <p>{{ user_p.profile.bio }}</p>
+    </div>
+    <hr>
+    <h3 style="text-align:center;">Videos Uploaded by {{ user_p.username }}</h3>
+    <div class="row">
+        {% for video in videos %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="{% url 'videos:detail' video.id %}" style="text-decoration:none; color:black;">
+                    <div class="card" style="margin-top:10px;">
+                        <img src="{{ video.thumbnail.url }}" alt="video-thumbnail" class="card-img img-fluid" style="height:200px;">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ video.title }}</h6>
+                            {{ video.views }} views<br>
+                            Uploaded On {{ video.date }}
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

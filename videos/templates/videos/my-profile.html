@@ -1,0 +1,42 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <img src="{{ user.profile.profile_picture.url }}" class="rounded img-fluid" style="height:325px; width:325px; margin-top:15px; margin-left:15px; float:left;">
+    <div style="text-align:center;">
+        <h1 class="display-2">{{ user.username }}</h1>
+        <h3 class="display-4">{{ user.first_name }} {{ user.last_name }}</h3>
+        <h4>{{ user.email }}</h4>
+        <strong>{{ user.profile.date_of_birth }}</strong>
+        <br><br>
+        <p>{{ user.profile.bio }}</p>
+        <a href="{% url 'videos:edit-profile' %}" style="align:left;" class="btn btn-primary btn-sm">Edit Profile</a>
+        <a href="{% url 'videos:liked-videos' %}" style="align:left;" class="btn btn-success btn-sm">Liked Videos</a>
+    </div>
+    <hr>
+    <h3 style="text-align:center;">Videos Uploaded by You</h3>
+    <div class="row">
+        {% for video in videos %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="{% url 'videos:detail' video.id %}" style="text-decoration:none; color:black;">
+                    <div class="card" style="margin-top:10px;">
+                        <img src="{{ video.thumbnail.url }}" alt="video-thumbnail" class="card-img img-fluid" style="height:200px;">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ video.title }}</h6>
+                            {{ video.views }} views<br>
+                            Uploaded On {{ video.date }}
+                        </div>
+                        <form action="{% url 'videos:delete-video' video.id %}" method="post">
+                            {% csrf_token %}
+                            <a href="{% url 'videos:update-video' video.id %}" class="btn btn-primary btn-sm">Update</a>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

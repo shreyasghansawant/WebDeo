@@ -1,0 +1,24 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="display-4">LogIn Form</h1>
+    <br>
+    <form action="{% url 'videos:login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {% for f in form %}
+                {{ f.label_tag }}
+                {{ f }}
+                <small class="text-muted">{{ f.help_text }}</small>
+            <br>
+            <br>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-success">LogIn</button>
+    </form><br>
+    <a href="{% url 'videos:signup' %}">Don't have a Account! Create Now!</a>
+</div>
+
+{% endblock %}

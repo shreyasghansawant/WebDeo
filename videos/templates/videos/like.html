@@ -1,0 +1,25 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <h3 class="display-4">Videos Liked by You</h3>
+    <div class="row">
+        {% for like in likes %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="{% url 'videos:detail' like.video.id %}" style="text-decoration:none; color:black;">
+                    <div class="card" style="margin-top:10px;">
+                        <img src="{{ like.video.thumbnail.url }}" alt="video-thumbnail" class="card-img img-fluid" style="height:200px;">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ like.video.title }}</h6>
+                            <a href="{% url 'videos:profile' like.video.id %}" class="card-text text-muted" title="View Profile">{{ like.video.admin }}</a> | {{ like.video.views }} views<br>
+                            Uploaded On {{ like.video.date }}
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+            <video controls autoplay class="embed-responsive" style="max-height:500px;" poster="{{ video.thumbnail.url }}">
+                <source src="{{ video.video.url }}">
+            </video>
+            <hr>
+            <form action="{% url 'videos:comment' video.id %}" method="get" title="After Commenting, this Page will Reload. Sorry!">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" name="c_text" class="form-control">
+                    <button type="submit" class="btn btn-success">Comment</button>
+                </div>
+            </form>
+            {{ num_comments }} Comments
+            <hr>
+                {% for comment in comments %}
+                <img src="{{ comment.user.profile.profile_picture.url }}" height="30px" width="30px" class="rounded" style="float:left;">
+                    <div class="card bg-secondary text-white" style="margin: 0px; padding:0px; margin-bottom:15px;">
+                        <div class="text-dark">
+                            <h6 class="card-title" style="margin: 0px; padding:0px; float:left;">
+                                <a href="{% url 'videos:comment-profile' comment.user.id %}" class="text-dark" title="View Profile">{{ comment.user }}</a>
+                                {% if comment.user == request.user %}
+                                    <a href="{% url 'videos:delete-comment' comment.id %}" style="color:red;">Delete</a>
+                                {% endif %}
+                            </h6>
+                            <small style="float:right;">{{ comment.date_time }}</small>
+                        </div>
+                        <hr style="padding:0px; margin:0px;">
+                        <p style="padding:0px; margin:0px;">{{ comment.text }}</p>
+                    </div>
+                {% endfor %}
+        </div>
+        <div class="col-lg-4">
+            <h3 class="display-5" style="word-wrap:break-word;">{{ video.title }}</h3>
+            {{ video.views }} views<br>
+            <hr>
+            <img src="{{ video.admin.profile.profile_picture.url }}" height="40px" width="40px" class="rounded" style="align:left;">&nbsp;&nbsp;
+            <a href="{% url 'videos:profile' video.id %}" class="text-muted" title="View Profile">{{ video.admin }}</a><br>
+            Uploaded On {{ video.date }} at {{ video.time }}<br>
+            <hr style="margin-bottom:5px;">
+            {% if video_liked == "Done" %}
+                <form action="{% url 'videos:unlike' video.id %}" method="post" style="float:left; margin-left:30px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">UnLike</button>
+                </form>
+            {% else %}
+                <form action="{% url 'videos:like' video.id %}" method="post" style="float:left; margin-left:50px;" title="After you Liked, this Page will Reload. Sorry!">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Like</button>
+                </form>
+            {% endif %}
+            <span style="margin-left:175px;">{{ likes }} Likes</span>
+            <hr>
+            <strong>Description:</strong>
+            <p style="word-wrap:break-word;">{{ video.description }}</p>
+        <div/>
+    </div>
+</div>
+
+{% endblock %}

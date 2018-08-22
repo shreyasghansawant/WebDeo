@@ -1,0 +1,36 @@
+{% extends "videos/base.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="display-4">Profile Form</h1>
+    <br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {% for f_u in form_u %}
+                {{ f_u.label_tag }}
+                {{ f_u }}
+                <small class="text-muted">{{ f_u.help_text }}</small>
+            <br>
+            <br>
+            {% endfor %}
+            {% for f in form %}
+                {{ f.label_tag }}
+                {{ f }}
+                <small class="text-muted">{{ f.help_text }}</small>
+            <br>
+            <br>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form><br>
+    <a href="{% url 'videos:edit-password' %}" class="btn btn-primary">Change Password</a>
+    <br>
+    <form action="{% url 'videos:delete-user' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+    </form>
+</div>
+
+{% endblock %}
